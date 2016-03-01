@@ -7,28 +7,41 @@ import android.bluetooth.BluetoothSocket;
 import java.util.UUID;
 
 /**
- * Created by zanderieux on 2/5/16.
+ * Class:
+ *      OBDAdapter
+ *
+ * Description:
+ *      Primary object representation for a physical OBD-II adapter.
+ *
+ * Author:
+ *      Alexander DeRieux
  */
-//
 public class OBDAdapter {
 
-    //  -----------------
-    // | Private Members |
-    //  -----------------
+    /**
+     * Private Members
+     */
     private BluetoothAdapter adapter;
     private BluetoothDevice device;
     private BluetoothSocket socket;
     private UUID uuid;
 
-    //  ----------------
-    // | Public Members |
-    //  ----------------
+    /**
+     * Public Members
+     */
     public String name;     // String name listed in a BT scan.
     public String address;  // MAC address.
 
-    //  -------------
-    // | Constructor |
-    //  -------------
+    /**
+     * Constructor:
+     *      OBDAdapter( BluetoothDevice )
+     *
+     * Description:
+     *      Creates new OBDAdapter object by maintaining reference
+     *      to a specific BluetoothDevice.
+     *
+     * @param   device  BluetoothDevice object.
+     */
     public OBDAdapter(BluetoothDevice device) {
         super();
 
@@ -36,6 +49,16 @@ public class OBDAdapter {
         this.configure(device);
     }
 
+    /**
+     * Method:
+     *      configure( BluetoothDevice )
+     *
+     * Description:
+     *      Helper method to setup configuration of this OBD Adapter object.
+     *
+     * @param   device      BluetoothDevice object.
+     * @return  boolean     Configuration success status.
+     */
     private boolean configure(BluetoothDevice device) {
 
         // Set the parameters of the device.
@@ -48,10 +71,20 @@ public class OBDAdapter {
         // Generate a random UUID for the device to connect with.
         this.uuid = UUID.randomUUID();
 
+        // Return configuration success.
         return (true);
     }
 
-    // Connect to this bluetooth OBD adapter using it's MAC address.
+
+    /**
+     * Method:
+     *      connect( )
+     *
+     * Description:
+     *      Connect to Bluetooth OBD adapter using its MAC address.
+     *
+     * @return  boolean     Connection success status.
+     */
     public boolean connect() {
 
         try {
