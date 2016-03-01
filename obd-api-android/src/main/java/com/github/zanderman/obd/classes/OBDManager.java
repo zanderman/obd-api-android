@@ -12,9 +12,16 @@ import android.util.Log;
 import com.github.zanderman.obd.interfaces.BluetoothCallbackInterface;
 
 /**
- * Created by zanderieux on 2/5/16.
+ * Class:
+ *      OBDManager
+ *
+ * Description:
+ *      Primary class for managing all Bluetooth interactions.
+ *
+ * Author:
+ *      Alexander DeRieux
  */
-public class OBDConfigure {
+public class OBDManager {
 
     //  -----------
     // | Constants |
@@ -27,7 +34,7 @@ public class OBDConfigure {
     private BroadcastReceiver receiver;
     private BluetoothAdapter adapter;
 
-    public OBDConfigure() {
+    public OBDManager() {
         super();
     }
 
