@@ -23,22 +23,39 @@ import com.github.zanderman.obd.interfaces.BluetoothCallbackInterface;
  */
 public class OBDManager {
 
-    //  -----------
-    // | Constants |
-    //  -----------
+    /**
+     * Constants
+     */
     private static final int REQUEST_ENABLE_BT = 1;
 
-    //  -----------------
-    // | Private Members |
-    //  -----------------
+    /**
+     * Private Members
+     */
     private BroadcastReceiver receiver;
     private BluetoothAdapter adapter;
 
+
+    /**
+     * Constructor:
+     *      OBDManager(  )
+     *
+     * Description:
+     *      Creates new OBDManager object.
+     */
     public OBDManager() {
         super();
     }
 
-    // Initialize all Bluetooth things.
+    /**
+     * Method:
+     *      init( Context, final BluetoothCallbackInterface )
+     *
+     * Description:
+     *      Sets up Bluetooth management for app.
+     *
+     * @param context                       Context for which the manager appears.
+     * @param bluetoothCallbackInterface    Custom Bluetooth callback interface.
+     */
     public void init(Context context, final BluetoothCallbackInterface bluetoothCallbackInterface) {
 
         // Obtain access to the BT adapter.
@@ -71,14 +88,24 @@ public class OBDManager {
     }
 
 
-    // Setup Bluetooth BroadcastReceivers.
+    /**
+     * Method:
+     *      createBroadcastReceiver( Context, final BluetoothCallbackInterface )
+     *
+     * Description:
+     *      ...
+     *
+     * @param context                       Context for which the broadcast appeared.
+     * @param bluetoothCallbackInterface    Custom callback interface for Bluetooth actions.
+     * @return boolean                      Creation success status.
+     */
     private boolean createBroadcastReceiver(Context context, final BluetoothCallbackInterface bluetoothCallbackInterface) {
 
         try {
 
-            //  ---------------------------------------
-            // | Broadcast Receiver: Bluetooth Actions |
-            //  ---------------------------------------
+            /**
+             * Setup broadcast receiver for bluetooth actions.
+             */
             this.receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -115,7 +142,17 @@ public class OBDManager {
         }
     }
 
-    // Unregisters all broadcast receivers.
+
+    /**
+     * Method:
+     *      destroyBroadcastReceiver( Context )
+     *
+     * Description:
+     *      Completely remove broadcast receiver for Bluetooth actions.
+     *
+     * @param   context     Context in which the broadcast receiver was created.
+     * @return  boolean     Success status of removal.
+     */
     public boolean destroyBroadcastReceiver(Context context) {
         try {
             context.unregisterReceiver(this.receiver);
@@ -125,14 +162,28 @@ public class OBDManager {
         }
     }
 
-    // Scan for a bluetooth OBD device.
+
+    /**
+     * Method:
+     *      startScan( )
+     *
+     * Description:
+     *      Commence scanning for Bluetooth devices.
+     */
     public void startScan() {
 
         // Start the BT discovery process.
         this.adapter.startDiscovery();
     }
 
-    // Scan for a bluetooth OBD device.
+
+    /**
+     * Method:
+     *      stopScan( )
+     *
+     * Description:
+     *      Terminate Bluetooth scanning process.
+     */
     public void stopScan() {
 
         // Start the BT discovery process.
