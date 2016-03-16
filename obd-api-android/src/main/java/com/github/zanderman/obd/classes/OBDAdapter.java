@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -16,7 +17,8 @@ import java.util.UUID;
  * Author:
  *      Alexander DeRieux
  */
-public class OBDAdapter {
+@SuppressWarnings("serial")
+public class OBDAdapter implements Serializable {
 
     /**
      * Private Members
@@ -155,3 +157,4 @@ public class OBDAdapter {
             return true;
     }
 }
+
