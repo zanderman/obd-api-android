@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.util.Log;
 
 import com.github.zanderman.obd.interfaces.BluetoothCallbackInterface;
-
 /**
  * Class:
  *      OBDManager
@@ -33,6 +32,7 @@ public class OBDManager {
      */
     private BroadcastReceiver receiver;
     private BluetoothAdapter adapter;
+    private IntentFilter btFilter;
 
 
     /**
@@ -73,17 +73,17 @@ public class OBDManager {
                 ((Activity) context).startActivityForResult(enableBtIntent, this.REQUEST_ENABLE_BT);
             }
 
-            // Register the broadcast receivers.
-            this.createBroadcastReceiver(context, bluetoothCallbackInterface);
+            // Create the receiver object.
+            this.createBroadcastReceiver(bluetoothCallbackInterface);
 
             // Create intent filter and add BT actions.
-            IntentFilter btFilter = new IntentFilter();
-            btFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-            btFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-            btFilter.addAction(BluetoothDevice.ACTION_FOUND);
+            this.btFilter = new IntentFilter();
+            this.btFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+            this.btFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+            this.btFilter.addAction(BluetoothDevice.ACTION_FOUND);
 
-            // Register the intent filter to the above broadcast receiver.
-            context.registerReceiver(this.receiver, btFilter);
+            // Register the broadcast receivers.
+            this.registerBroadcastReceiver(context);
         }
     }
 
@@ -95,11 +95,10 @@ public class OBDManager {
      * Description:
      *      ...
      *
-     * @param context                       Context for which the broadcast appeared.
      * @param bluetoothCallbackInterface    Custom callback interface for Bluetooth actions.
      * @return boolean                      Creation success status.
      */
-    private boolean createBroadcastReceiver(Context context, final BluetoothCallbackInterface bluetoothCallbackInterface) {
+    private boolean createBroadcastReceiver(final BluetoothCallbackInterface bluetoothCallbackInterface) {
 
         try {
 
@@ -139,10 +138,30 @@ public class OBDManager {
         }
     }
 
+    /**
+     * Method:
+     *      registerBroadcastReceiver( Context )
+     *
+     * Description:
+     *      Links the Bluetooth actions receiver to the given context.
+     *
+     * @param   context     Context to which the broadcast receiver is to be linked.
+     * @return  boolean     Success status of registry.
+     */
+    public boolean registerBroadcastReceiver(Context context) {
+        try {
+            // Register the intent filter to the above broadcast receiver.
+            context.registerReceiver(this.receiver, btFilter);
+            return (true);
+        } catch (Exception e) {
+            return (false);
+        }
+    }
+
 
     /**
      * Method:
-     *      destroyBroadcastReceiver( Context )
+     *      unregisterBroadcastReceiver( Context )
      *
      * Description:
      *      Completely remove broadcast receiver for Bluetooth actions.
@@ -150,7 +169,7 @@ public class OBDManager {
      * @param   context     Context in which the broadcast receiver was created.
      * @return  boolean     Success status of removal.
      */
-    public boolean destroyBroadcastReceiver(Context context) {
+    public boolean unregisterBroadcastReceiver(Context context) {
         try {
             context.unregisterReceiver(this.receiver);
             return (true);
