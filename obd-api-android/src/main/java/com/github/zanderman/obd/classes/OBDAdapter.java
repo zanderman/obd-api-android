@@ -3,12 +3,19 @@ package com.github.zanderman.obd.classes;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
+
+import com.github.zanderman.obd.receivers.OBDReceiver;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class:
@@ -35,6 +42,7 @@ public class OBDAdapter implements Serializable {
      * Constants
      */
     private final int TIMEOUT = 50; /* Total number of read-iterations before timing-out. */
+    private final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); /* Required UUID for OBD Bluetooth connection. */
 
     /**
      * Private Members
@@ -44,7 +52,6 @@ public class OBDAdapter implements Serializable {
     private BluetoothSocket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
-    private UUID uuid;
     private volatile Status status;
     private Thread receiveThread;
 
@@ -102,9 +109,6 @@ public class OBDAdapter implements Serializable {
         this.device = device;
         this.socket = null;
         this.status = Status.DISCONNECTED;
-
-        // Generate a random UUID for the device to connect with.
-        this.uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
 
         /*
          * Setup thread-shared variables.
